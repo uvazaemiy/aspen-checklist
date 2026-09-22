@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToothCare Studio 2026 — Учет материалов клиники</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter & Comfortaa for Cute Aesthetics -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        cute: ['Comfortaa', 'cursive']
+                    },
+                    colors: {
+                        pastel: {
+                            green: { light: '#E8F5E9', DEFAULT: '#A5D6A7', dark: '#4CAF50', border: '#81C784', hover: '#C8E6C9' },
+                            blue: { light: '#E3F2FD', DEFAULT: '#90CAF9', dark: '#2196F3', border: '#64B5F6', hover: '#BBDEFB' },
+                            orange: { light: '#FFF3E0', DEFAULT: '#FFCC80', dark: '#FF9800', border: '#FFB74D', hover: '#FFE0B2' },
+                            pink: { light: '#FCE4EC', DEFAULT: '#F48FB1', dark: '#E91E63', border: '#F06292' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styling & Cute Background Pattern */
+        body {
+            background-color: #f7f9fc;
+            background-image: 
+                radial-gradient(rgba(244, 143, 177, 0.12) 2px, transparent 2px),
+                radial-gradient(rgba(129, 199, 132, 0.12) 2px, transparent 2px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* Floating Cat Paws Background Effect */
+        .cat-bg-paw {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.06;
+            animation: floatPaw 12s infinite ease-in-out;
+        }
+
+        @keyframes floatPaw {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-15px) rotate(6deg) scale(1.05); }
+        }
+
+        /* Glassmorphism Containers */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.12);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Long press progress indicator styling */
+        .press-progress-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f43f5e, #e11d48);
+            width: 0%;
+            transition: width 0.05s linear;
+            border-radius: 0 0 16px 16px;
+        }
+
+        /* Custom scrollbar for aesthetic appeal */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.6);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(203, 213, 225, 0.8);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.9);
+        }
+
+        /* Button ripple & active state animations */
+        .btn-pop {
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .btn-pop:active {
+            transform: scale(0.96);
+        }
+
+        /* Pulse glow for active sync indicator */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.15); }
+        }
+        .sync-pulse {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 relative overflow-x-hidden flex flex-col">
+
+    <div id="bg-decorations">
+        <svg class="cat-bg-paw top-10 left-5 w-24 h-24 text-pink-400" viewBox="0 0 100 100" fill="currentColor">
+            <path d="M50,45 C42,45 35,52 35,62 C35,74 43,82 50,82 C57,82 65,74 65,62 C65,52 58,45 50,45 Z M25,42 C20,42 16,36 16,30 C16,24 20,20 25,20 C30,20 34,24 34,30 C34,36 30,42 25,42 Z M40,28 C36,28 32,23 32,17 C32,11 36,7 40,7 C44,7 48,11 48,17 C48,23 44,28 40,28 Z M60,28 C56,28 52,23 52,17 C52,11 56,7 60,7 C64,7 68,11 68,17 C68,23 64,28 60,28 Z M75,42 C70,42 66,36 66,30 C66,24 70,20 75,20 C80,20 84,24 84,30 C84,36 80,42 75,42 Z"/>
+        </svg>
+        <svg class="cat-bg-paw top-1/3 right-8 w-32 h-32 text-indigo-300" viewBox="0 0 100 100" fill="currentColor" style="animation-delay: -3s;">
+            <path d="M50,45 C42,45 35,52 35,62 C35,74 43,82 50,82 C57,82 65,74 65,62 C65,52 58,45 50,45 Z M25,42 C20,42 16,36 16,30 C16,24 20,20 25,20 C30,20 34,24 34,30 C34,36 30,42 25,42 Z M40,28 C36,28 32,23 32,17 C32,11 36,7 40,7 C44,7 48,11 48,17 C48,23 44,28 40,28 Z M60,28 C56,28 52,23 52,17 C52,11 56,7 60,7 C64,7 68,11 68,17 C68,23 64,28 60,28 Z M75,42 C70,42 66,36 66,30 C66,24 70,20 75,20 C80,20 84,24 84,30 C84,36 80,42 75,42 Z"/>
+        </svg>
+        <svg class="cat-bg-paw bottom-12 left-1/4 w-28 h-28 text-emerald-300" viewBox="0 0 100 100" fill="currentColor" style="animation-delay: -6s;">
+            <path d="M50,45 C42,45 35,52 35,62 C35,74 43,82 50,82 C57,82 65,74 65,62 C65,52 58,45 50,45 Z M25,42 C20,42 16,36 16,30 C16,24 20,20 25,20 C30,20 34,24 34,30 C34,36 30,42 25,42 Z M40,28 C36,28 32,23 32,17 C32,11 36,7 40,7 C44,7 48,11 48,17 C48,23 44,28 40,28 Z M60,28 C56,28 52,23 52,17 C52,11 56,7 60,7 C64,7 68,11 68,17 C68,23 64,28 60,28 Z M75,42 C70,42 66,36 66,30 C66,24 70,20 75,20 C80,20 84,24 84,30 C84,36 80,42 75,42 Z"/>
+        </svg>
+    </div>
+
+    <header class="glass-nav sticky top-0 z-30 px-4 py-3 shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+            <!-- App Logo & Title -->
+            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-400 via-rose-300 to-purple-300 flex items-center justify-center text-white shadow-md shadow-pink-200">
+                        <i class="fa-solid fa-paw text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-cute font-bold text-lg text-slate-800 leading-tight flex items-center gap-1.5">
+                            ToothCare <span class="text-xs px-2 py-0.5 rounded-full bg-pink-100 text-pink-600 font-sans font-semibold">Cute Med 2026</span>
+                        </h1>
+                        <p class="text-xs text-slate-500">Учет материалов и инструментов клиники</p>
+                    </div>
+                </div>
+
+                <!-- API Connection Badge Button (Mobile) -->
+                <button id="sync-status-btn-mobile" onclick="openSettingsModal()" class="md:hidden text-xs px-3 py-1.5 rounded-xl glass-card flex items-center gap-1.5 font-medium border border-slate-200">
+                    <span id="sync-dot-mobile" class="w-2.5 h-2.5 rounded-full bg-emerald-500 sync-pulse"></span>
+                    <span id="sync-text-mobile">Синхронно</span>
+                </button>
+            </div>
+
+            <!-- Search Bar & Stats Header -->
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <div class="relative flex-1 md:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Поиск материала или инструмента..." class="w-full pl-9 pr-8 py-1.5 text-xs rounded-xl border border-slate-200 bg-white/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all placeholder:text-slate-400">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Completion Counter Badge -->
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-xs font-medium text-slate-600 shadow-sm">
+                    <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                    <span id="cabinet-progress-text">Готово: 0 / 0</span>
+                </div>
+
+                <!-- Sync Status Badge (Desktop) -->
+                <button id="sync-status-btn-desktop" onclick="openSettingsModal()" class="hidden md:flex text-xs px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 hover:border-pink-300 items-center gap-2 font-medium text-slate-600 shadow-sm transition-all">
+                    <span id="sync-dot-desktop" class="w-2.5 h-2.5 rounded-full bg-emerald-500 sync-pulse"></span>
+                    <span id="sync-text-desktop">Синхронизировано</span>
+                    <i class="fa-solid fa-gear text-slate-400 ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-5 flex-1 flex flex-col gap-5 w-full relative z-10">
+
+        <section class="flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-door-open"></i> Выберите кабинет
+                </span>
+                <span class="text-[11px] text-slate-400 italic hidden sm:inline">
+                    💡 Удерживайте вкладку 1 сек. для полного сброса всего кабинета
+                </span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2.5 sm:gap-4">
+                <!-- Green Cabinet Tab -->
+                <button id="tab-cabinet-green" 
+                        class="cabinet-tab-btn relative overflow-hidden rounded-2xl p-3 sm:p-4 text-left transition-all btn-pop border-2 glass-card flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3"
+                        onclick="switchCabinet('green')">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-leaf text-base"></i>
+                    </div>
+                    <div class="min-w-0 flex-1 text-center sm:text-left">
+                        <div class="font-cute font-bold text-xs sm:text-sm text-slate-800 truncate">Зеленый</div>
+                        <div class="text-[10px] text-slate-500 hidden sm:block">Кабинет №1</div>
+                    </div>
+                    <div id="badge-count-green" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200/80 text-emerald-800">
+                        0%
+                    </div>
+                    <div class="press-progress-overlay" id="hold-progress-cabinet-green"></div>
+                </button>
+
+                <!-- Blue Cabinet Tab -->
+                <button id="tab-cabinet-blue" 
+                        class="cabinet-tab-btn relative overflow-hidden rounded-2xl p-3 sm:p-4 text-left transition-all btn-pop border-2 glass-card flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3"
+                        onclick="switchCabinet('blue')">
+                    <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-droplet text-base"></i>
+                    </div>
+                    <div class="min-w-0 flex-1 text-center sm:text-left">
+                        <div class="font-cute font-bold text-xs sm:text-sm text-slate-800 truncate">Синий</div>
+                        <div class="text-[10px] text-slate-500 hidden sm:block">Кабинет №2</div>
+                    </div>
+                    <div id="badge-count-blue" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-200/80 text-sky-800">
+                        0%
+                    </div>
+                    <div class="press-progress-overlay" id="hold-progress-cabinet-blue"></div>
+                </button>
+
+                <!-- Orange Cabinet Tab -->
+                <button id="tab-cabinet-orange" 
+                        class="cabinet-tab-btn relative overflow-hidden rounded-2xl p-3 sm:p-4 text-left transition-all btn-pop border-2 glass-card flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3"
+                        onclick="switchCabinet('orange')">
+                    <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-sun text-base"></i>
+                    </div>
+                    <div class="min-w-0 flex-1 text-center sm:text-left">
+                        <div class="font-cute font-bold text-xs sm:text-sm text-slate-800 truncate">Оранжевый</div>
+                        <div class="text-[10px] text-slate-500 hidden sm:block">Кабинет №3</div>
+                    </div>
+                    <div id="badge-count-orange" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-800">
+                        0%
+                    </div>
+                    <div class="press-progress-overlay" id="hold-progress-cabinet-orange"></div>
+                </button>
+            </div>
+        </section>
+
+        <section class="flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-box-archive"></i> Ящики и Инструменты
+                </span>
+                <span class="text-[11px] text-slate-400 italic hidden sm:inline">
+                    💡 Удерживайте ящик 1 сек. для сброса только этого ящика
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+                <!-- Drawer 1 -->
+                <button id="tab-drawer-drawer1" onclick="switchDrawer('drawer1')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-box font-normal text-slate-400"></i>
+                    <span>Ящик 1</span>
+                    <span id="subtab-badge-drawer1" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
+                    <div class="press-progress-overlay" id="hold-progress-drawer-drawer1"></div>
+                </button>
+
+                <!-- Drawer 2 -->
+                <button id="tab-drawer-drawer2" onclick="switchDrawer('drawer2')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-box font-normal text-slate-400"></i>
+                    <span>Ящик 2</span>
+                    <span id="subtab-badge-drawer2" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
+                    <div class="press-progress-overlay" id="hold-progress-drawer-drawer2"></div>
+                </button>
+
+                <!-- Drawer 3 -->
+                <button id="tab-drawer-drawer3" onclick="switchDrawer('drawer3')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-box font-normal text-slate-400"></i>
+                    <span>Ящик 3</span>
+                    <span id="subtab-badge-drawer3" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
+                    <div class="press-progress-overlay" id="hold-progress-drawer-drawer3"></div>
+                </button>
+
+                <!-- Drawer 4 -->
+                <button id="tab-drawer-drawer4" onclick="switchDrawer('drawer4')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-box font-normal text-slate-400"></i>
+                    <span>Ящик 4</span>
+                    <span id="subtab-badge-drawer4" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
+                    <div class="press-progress-overlay" id="hold-progress-drawer-drawer4"></div>
+                </button>
+
+                <!-- Tools Subtab -->
+                <button id="tab-drawer-tools" onclick="switchDrawer('tools')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-screwdriver-wrench font-normal text-slate-400"></i>
+                    <span>Инструменты</span>
+                    <span id="subtab-badge-tools" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
+                    <div class="press-progress-overlay" id="hold-progress-drawer-tools"></div>
+                </button>
+            </div>
+        </section>
+
+        <section id="content-container" class="glass-card rounded-3xl p-4 sm:p-6 transition-all min-h-[420px] relative">
+            <!-- Dynamic Content Header -->
+            <div class="flex items-center justify-between border-b border-slate-200/60 pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <h2 id="active-title" class="font-cute font-bold text-base sm:text-lg text-slate-800">
+                        Загрузка...
+                    </h2>
+                    <span id="active-sub-count" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
+                        0 элементов
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="resetCurrentActiveTab()" title="Сбросить текущую вкладку" class="text-xs text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl font-medium transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span class="hidden sm:inline">Сбросить здесь</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Material Buttons Grid or Tools Panel Container -->
+            <div id="items-grid" class="min-h-[250px]">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <div id="settings-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+        <div class="glass-card bg-white/95 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-white/80 transform scale-95 transition-transform duration-200" id="settings-modal-card">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center">
+                        <i class="fa-solid fa-cloud-arrow-up text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-cute font-bold text-slate-800 text-base">Настройки Синхронизации</h3>
+                        <p class="text-xs text-slate-400">npoint.io API интеграция</p>
+                    </div>
+                </div>
+                <button onclick="closeSettingsModal()" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">npoint.io URL или Bin ID</label>
+                    <input type="text" id="api-url-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 font-mono text-xs" placeholder="https://api.npoint.io/YOUR_BIN_ID">
+                    <p class="text-[11px] text-slate-400 mt-1">
+                        Вы можете указать собственный Bin ID из <a href="https://www.npoint.io" target="_blank" class="text-pink-500 underline">npoint.io</a>.
+                    </p>
+                </div>
+
+                <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div class="flex justify-between items-center text-slate-600">
+                        <span>Статус подключения:</span>
+                        <span id="modal-conn-status" class="font-semibold text-emerald-600">Готов</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-600">
+                        <span>Последнее обновление:</span>
+                        <span id="modal-last-sync" class="font-mono text-[11px]">Никогда</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="fetchRemoteData(true)" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition-colors flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Загрузить
+                    </button>
+                    <button onclick="saveRemoteData(true)" class="w-full py-2.5 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-semibold shadow-md shadow-pink-200 transition-colors flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Сохранить
+                    </button>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <button onclick="exportJSONData()" class="text-slate-500 hover:text-slate-700 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-download"></i> Экспорт JSON
+                    </button>
+                    <button onclick="triggerImportFile()" class="text-slate-500 hover:text-slate-700 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-upload"></i> Импорт JSON
+                    </button>
+                    <input type="file" id="import-file-input" accept=".json" class="hidden" onchange="importJSONData(event)">
+                </div>
+            </div>
+
+            <div class="mt-5 text-right">
+                <button onclick="closeSettingsModal()" class="px-5 py-2 rounded-xl bg-slate-800 text-white font-semibold hover:bg-slate-900 transition-colors">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        // Master API URL (npoint.io)
+        const API_URL = 'YOUR_NPOINT_URL';
+
+        // Static Master Material Lists Definition
+        const DRAWER_1_ITEMS = [
+            "Пакуемые материалы A1", "Пакуемые материалы A2", "Пакуемые материалы A3", "Пакуемые материалы A3.5",
+            "Жидкотекучие материалы A2", "Жидкотекучие материалы A3", "Увлажняющий материал (смола)", "Жидкий коффердам",
+            "Кальцийсодержащая прокладка", "Бонд", "Травильный гель", "Фторлак", "Витамин E",
+            "Ретракционные нити 00", "Ретракционные нити 000", "Маленький блокнот для замешивания", "Флосс",
+            "Насадка на ультразвук", "Защитный экран для лампы", "Лампа", "Кариес-маркер", "Jen-DuaCem (двойной цемент)",
+            "Метрогил/Метровиол", "Полировочная паста", "Браши", "Копирка и пинцет для копирки", "Временная пломба",
+            "Полировочные штрипсы", "Полировочные диски — 5 синих", "Полировочные диски — 5 зелёных",
+            "Полировочные диски — 5 белых", "Полировочные диски — 5 жёлтых", "5 насадок для двойного цемента",
+            "Лавсановые (прозрачные) матрицы", "Металлические матрицы", "Клинья зелёные", "Клинья синие",
+            "Клинья жёлтые", "Клинья фиолетовые", "Металлические кольца для матриц", "Металлические полировочные штрипсы"
+        ];
+
+        const DRAWER_2_ITEMS = [
+            "5 эндолинеек", "Эндомотор", "Апекслокатор", "3 клинстенда", "4 загубника", "4 эндобокса", "6 пар эндоигл",
+            "5 спонжей для клинстенда", "Нож для гуттаперчи", "4 насадки для ножа", "Тефлон", "Adseal", "Девит",
+            "Кальций", "Пульпоэкстракторы", "Вата", "Гваяфен", "Йодоформ", "Дексодент",
+            "Бумажные пины конусности 04 и 06", "Гуттаперча конусности 04 и 06", "10 шприцов для промывания"
+        ];
+
+        // Drawer 3 structured data (Includes Framed Panel "Шприцы")
+        const DRAWER_3_STRUCTURE = {
+            regularBefore: [
+                "Канюли для шприцов", "3 набора развёрток", "Крампоны", "Карпульный шприц",
+                "5 инсулиновых шприцов", "Перекись водорода 3%", "Хлоргексидин 0,05%", "Спирт"
+            ],
+            framedPanel: {
+                title: "Шприцы",
+                icon: "fa-syringe",
+                items: ["2 шт. по 2 мл", "2 шт. по 5 мл", "2 шт. по 10 мл"]
+            },
+            regularAfter: [
+                "OptraGate S — 5 шт.", "OptraGate R — 5 шт.", "Длинные карпульные иглы — 10 шт.",
+                "Короткие карпульные иглы — 10 шт.", "СХ (постоянный цемент) — 1 шт.", "Средний блокнот",
+                "Гемостатики ViscoStat и Немоха", "Септанест 1:100 000 — 10 шт.", "Септанест 1:200 000 — 10 шт.",
+                "Скандонест — 10 шт.", "Tempolat C — 1 шт.", "Жабки — 3 шт."
+            ]
+        };
+
+        // Drawer 4 structured data (Includes Framed Panels "Растворы" and "Пылесосы")
+        const DRAWER_4_STRUCTURE = {
+            regularBefore: [
+                "Боксы с борами"
+            ],
+            framedPanels: [
+                {
+                    title: "Растворы",
+                    icon: "fa-vial",
+                    items: ["гипохлорит 5,25%", "лимонная кислота", "хлоргексидин 2%"]
+                },
+                {
+                    title: "Пылесосы",
+                    icon: "fa-wind",
+                    items: ["5 белых", "5 зелёных", "5 синих", "2 больших белых"]
+                }
+            ],
+            regularAfter: [
+                "Насадки на ультразвук", "Неотложная медицина"
+            ]
+        };
+
+        // Tools Tab Master Content Configuration per Cabinet
+        const CABINET_TOOLS = {
+            green: [
+                { name: "Лампа", icon: "fa-lightbulb", actions: ["Зарядка", "Чистка"] },
+                { name: "Эндомотор", icon: "fa-gear", actions: ["Зарядка", "Чистка"] },
+                { name: "Нож для гуттаперчи", icon: "fa-scissors", actions: ["Зарядка", "Чистка"] },
+                { name: "Лампа для отбеливания", icon: "fa-sun", actions: ["Зарядка", "Чистка"] }
+            ],
+            blue: [
+                { name: "Лампа", icon: "fa-lightbulb", actions: ["Зарядка", "Чистка"] },
+                { name: "Эндомотор", icon: "fa-gear", actions: ["Зарядка", "Чистка"] },
+                { name: "Нож для гуттаперчи", icon: "fa-scissors", actions: ["Зарядка", "Чистка"] },
+                { name: "Апекслокатор", icon: "fa-wave-square", actions: ["Зарядка", "Чистка"] },
+                { name: "Рентген", icon: "fa-x-ray", actions: ["Зарядка", "Чистка"] },
+                { name: "Ультразвук", icon: "fa-bullhorn", actions: ["Зарядка", "Чистка"] },
+                { name: "Аирфлоу (Airflow)", icon: "fa-wind", actions: ["Зарядка", "Чистка", "Продувка"] },
+                { name: "Дополнительный прибор", icon: "fa-microchip", actions: ["Зарядка", "Чистка"] }
+            ],
+            orange: [
+                { name: "Лампа", icon: "fa-lightbulb", actions: ["Зарядка", "Чистка"] },
+                { name: "Эндомотор", icon: "fa-gear", actions: ["Зарядка", "Чистка"] },
+                { name: "Нож для гуттаперчи", icon: "fa-scissors", actions: ["Зарядка", "Чистка"] },
+                { name: "Сканер", icon: "fa-camera", actions: ["Зарядка", "Чистка"] },
+                { name: "Инфузомат", icon: "fa-notes-medical", actions: ["Зарядка", "Чистка"] }
+            ]
+        };
+
+        let currentCabinet = 'green'; // 'green' | 'blue' | 'orange'
+        let currentDrawer = 'drawer1'; // 'drawer1' | 'drawer2' | 'drawer3' | 'drawer4' | 'tools'
+        let searchQuery = '';
+
+        // Master Application State Object
+        let appState = {
+            cabinets: {
+                green: { drawer1: {}, drawer2: {}, drawer3: {}, drawer4: {}, tools: {} },
+                blue: { drawer1: {}, drawer2: {}, drawer3: {}, drawer4: {}, tools: {} },
+                orange: { drawer1: {}, drawer2: {}, drawer3: {}, drawer4: {}, tools: {} }
+            },
+            lastUpdated: new Date().toISOString()
+        };
+
+        // Long Press Handler States
+        let pressTimer = null;
+        let pressProgressInterval = null;
+        let isLongPressTriggered = false;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playChime(type) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'toggle-on') {
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                } else if (type === 'toggle-off') {
+                    osc.frequency.setValueAtTime(440, now); // A4
+                    osc.frequency.exponentialRampToValueAtTime(349.23, now + 0.1); // F4
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                } else if (type === 'reset') {
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.25);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {
+                // Audio fallback silence
+            }
+        }
+
+        window.addEventListener('load', () => {
+            loadLocalState();
+            setupTabPressListeners();
+            fetchRemoteData(false);
+            renderApp();
+        });
+
+        function getEffectiveApiUrl() {
+            const savedUrl = localStorage.getItem('toothcare_npoint_url');
+            if (savedUrl && savedUrl.trim() !== '') {
+                return savedUrl.trim();
+            }
+            return API_URL;
+        }
+
+        function saveLocalState() {
+            appState.lastUpdated = new Date().toISOString();
+            localStorage.setItem('toothcare_clinic_state_2026', JSON.stringify(appState));
+            updateSyncBadge('saving', 'Сохранение...');
+            debounceApiSave();
+        }
+
+        function loadLocalState() {
+            const saved = localStorage.getItem('toothcare_clinic_state_2026');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && parsed.cabinets) {
+                        appState = parsed;
+                    }
+                } catch (e) {
+                    console.error('Failed to parse local storage', e);
+                }
+            }
+        }
+
+        let apiSaveTimeout = null;
+        function debounceApiSave() {
+            clearTimeout(apiSaveTimeout);
+            apiSaveTimeout = setTimeout(() => {
+                saveRemoteData(false);
+            }, 800);
+        }
+
+        async function fetchRemoteData(isManual = false) {
+            const targetUrl = getEffectiveApiUrl();
+            if (!targetUrl || targetUrl === 'YOUR_NPOINT_URL') {
+                updateSyncBadge('local', 'Локальный режим');
+                if (isManual) showToast('Укажите действительный URL npoint.io в настройках', 'warning');
+                return;
+            }
+
+            updateSyncBadge('saving', 'Загрузка...');
+            try {
+                const response = await fetch(targetUrl, { method: 'GET' });
+                if (response.ok) {
+                    const remoteData = await response.json();
+                    if (remoteData && remoteData.cabinets) {
+                        appState = remoteData;
+                        localStorage.setItem('toothcare_clinic_state_2026', JSON.stringify(appState));
+                        renderApp();
+                        updateSyncBadge('synced', 'Синхронизировано');
+                        if (isManual) showToast('Данные успешно загружены из облака! ✨', 'success');
+                    } else {
+                        throw new Error('Неверная структура данных');
+                    }
+                } else {
+                    throw new Error('Ошибка сети: ' + response.status);
+                }
+            } catch (err) {
+                console.warn('API Fetch error:', err);
+                updateSyncBadge('error', 'Ошибка сети');
+                if (isManual) showToast('Не удалось загрузить данные из облака', 'error');
+            }
+        }
+
+        async function saveRemoteData(isManual = false) {
+            const targetUrl = getEffectiveApiUrl();
+            if (!targetUrl || targetUrl === 'YOUR_NPOINT_URL') {
+                updateSyncBadge('local', 'Локальный режим');
+                if (isManual) showToast('Укажите действительный URL npoint.io в настройках', 'warning');
+                return;
+            }
+
+            updateSyncBadge('saving', 'Сохранение...');
+            try {
+                const response = await fetch(targetUrl, {
+                    method: 'POST', // npoint supports POST/PUT
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(appState)
+                });
+
+                if (response.ok) {
+                    updateSyncBadge('synced', 'Синхронизировано');
+                    if (isManual) showToast('Состояние успешно сохранено в npoint.io! ☁️', 'success');
+                } else {
+                    throw new Error('Response code: ' + response.status);
+                }
+            } catch (err) {
+                console.warn('API Save error:', err);
+                updateSyncBadge('error', 'Ошибка сохранения');
+                if (isManual) showToast('Ошибка синхронизации с npoint.io', 'error');
+            }
+        }
+
+        function updateSyncBadge(status, text) {
+            const desktopDot = document.getElementById('sync-dot-desktop');
+            const desktopText = document.getElementById('sync-text-desktop');
+            const mobileDot = document.getElementById('sync-dot-mobile');
+            const mobileText = document.getElementById('sync-text-mobile');
+            const modalStatus = document.getElementById('modal-conn-status');
+            const modalLastSync = document.getElementById('modal-last-sync');
+
+            if (desktopText) desktopText.innerText = text;
+            if (mobileText) mobileText.innerText = text;
+
+            let dotClass = 'bg-emerald-500 sync-pulse';
+            let statusTextClass = 'text-emerald-600';
+
+            if (status === 'saving') {
+                dotClass = 'bg-amber-400 sync-pulse';
+                statusTextClass = 'text-amber-600';
+            } else if (status === 'error') {
+                dotClass = 'bg-rose-500';
+                statusTextClass = 'text-rose-600';
+            } else if (status === 'local') {
+                dotClass = 'bg-slate-400';
+                statusTextClass = 'text-slate-500';
+            }
+
+            if (desktopDot) desktopDot.className = `w-2.5 h-2.5 rounded-full ${dotClass}`;
+            if (mobileDot) mobileDot.className = `w-2.5 h-2.5 rounded-full ${dotClass}`;
+            if (modalStatus) {
+                modalStatus.innerText = text;
+                modalStatus.className = `font-semibold ${statusTextClass}`;
+            }
+
+            if (modalLastSync && appState.lastUpdated) {
+                const date = new Date(appState.lastUpdated);
+                modalLastSync.innerText = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }
+        }
+
+        function switchCabinet(cabinet) {
+            currentCabinet = cabinet;
+            renderApp();
+        }
+
+        function switchDrawer(drawer) {
+            currentDrawer = drawer;
+            renderApp();
+        }
+
+        function handleSearch(val) {
+            searchQuery = val.trim().toLowerCase();
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (clearBtn) {
+                clearBtn.classList.toggle('hidden', searchQuery === '');
+            }
+            renderItemsGrid();
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.value = '';
+            handleSearch('');
+        }
+
+        function renderApp() {
+            updateTabStyles();
+            renderItemsGrid();
+            updateCabinetProgressBadges();
+        }
+
+        function updateTabStyles() {
+            // Cabinet theme accents map
+            const themeMap = {
+                green: {
+                    activeBg: 'bg-emerald-50 border-emerald-400 text-emerald-900 shadow-md shadow-emerald-100',
+                    border: 'border-emerald-300'
+                },
+                blue: {
+                    activeBg: 'bg-sky-50 border-sky-400 text-sky-900 shadow-md shadow-sky-100',
+                    border: 'border-sky-300'
+                },
+                orange: {
+                    activeBg: 'bg-amber-50 border-amber-400 text-amber-900 shadow-md shadow-amber-100',
+                    border: 'border-amber-300'
+                }
+            };
+
+            // Update main Cabinet tabs
+            ['green', 'blue', 'orange'].forEach(cab => {
+                const tabEl = document.getElementById(`tab-cabinet-${cab}`);
+                if (!tabEl) return;
+                if (cab === currentCabinet) {
+                    tabEl.className = `cabinet-tab-btn relative overflow-hidden rounded-2xl p-3 sm:p-4 text-left transition-all btn-pop border-2 glass-card flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3 ${themeMap[cab].activeBg}`;
+                } else {
+                    tabEl.className = `cabinet-tab-btn relative overflow-hidden rounded-2xl p-3 sm:p-4 text-left transition-all btn-pop border-2 glass-card border-slate-200/80 hover:border-slate-300 opacity-75 hover:opacity-100 flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3`;
+                }
+            });
+
+            // Active theme drawer styling
+            const activeColorTheme = themeMap[currentCabinet];
+
+            // Update Subtabs (Drawers 1-4 + Tools)
+            ['drawer1', 'drawer2', 'drawer3', 'drawer4', 'tools'].forEach(drw => {
+                const subtabEl = document.getElementById(`tab-drawer-${drw}`);
+                if (!subtabEl) return;
+                if (drw === currentDrawer) {
+                    subtabEl.className = `subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-semibold text-xs whitespace-nowrap transition-all glass-card border-2 flex items-center gap-2 ${activeColorTheme.activeBg}`;
+                } else {
+                    subtabEl.className = `subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200/80 text-slate-600 hover:bg-white/80 flex items-center gap-2`;
+                }
+
+                // Subtab completion counters
+                const badge = document.getElementById(`subtab-badge-${drw}`);
+                if (badge) {
+                    const stats = getDrawerStats(currentCabinet, drw);
+                    badge.innerText = `${stats.active}/${stats.total}`;
+                    badge.className = stats.active === stats.total && stats.total > 0 
+                        ? 'px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold'
+                        : 'px-1.5 py-0.5 rounded-full bg-slate-200/60 text-slate-600 text-[10px] font-bold';
+                }
+            });
+        }
+
+        function getDrawerStats(cabinet, drawer) {
+            const cabData = appState.cabinets[cabinet] || {};
+            const drawerData = cabData[drawer] || {};
+
+            let total = 0;
+            let active = 0;
+
+            if (drawer === 'drawer1') {
+                total = DRAWER_1_ITEMS.length;
+                DRAWER_1_ITEMS.forEach(item => { if (drawerData[item]) active++; });
+            } else if (drawer === 'drawer2') {
+                total = DRAWER_2_ITEMS.length;
+                DRAWER_2_ITEMS.forEach(item => { if (drawerData[item]) active++; });
+            } else if (drawer === 'drawer3') {
+                const allItems = [
+                    ...DRAWER_3_STRUCTURE.regularBefore,
+                    ...DRAWER_3_STRUCTURE.framedPanel.items,
+                    ...DRAWER_3_STRUCTURE.regularAfter
+                ];
+                total = allItems.length;
+                allItems.forEach(item => { if (drawerData[item]) active++; });
+            } else if (drawer === 'drawer4') {
+                const allItems = [
+                    ...DRAWER_4_STRUCTURE.regularBefore,
+                    ...DRAWER_4_STRUCTURE.framedPanels[0].items,
+                    ...DRAWER_4_STRUCTURE.framedPanels[1].items,
+                    ...DRAWER_4_STRUCTURE.regularAfter
+                ];
+                total = allItems.length;
+                allItems.forEach(item => { if (drawerData[item]) active++; });
+            } else if (drawer === 'tools') {
+                const tools = CABINET_TOOLS[cabinet] || [];
+                tools.forEach(t => {
+                    t.actions.forEach(act => {
+                        total++;
+                        const key = `${t.name}_${act}`;
+                        if (drawerData[key]) active++;
+                    });
+                });
+            }
+
+            return { active, total };
+        }
+
+        function updateCabinetProgressBadges() {
+            let grandTotalCabinet = 0;
+            let grandActiveCabinet = 0;
+
+            ['green', 'blue', 'orange'].forEach(cab => {
+                let cabTotal = 0;
+                let cabActive = 0;
+                ['drawer1', 'drawer2', 'drawer3', 'drawer4', 'tools'].forEach(drw => {
+                    const st = getDrawerStats(cab, drw);
+                    cabTotal += st.total;
+                    cabActive += st.active;
+                });
+
+                const pct = cabTotal > 0 ? Math.round((cabActive / cabTotal) * 100) : 0;
+                const badgeEl = document.getElementById(`badge-count-${cab}`);
+                if (badgeEl) {
+                    badgeEl.innerText = `${pct}%`;
+                }
+
+                if (cab === currentCabinet) {
+                    grandTotalCabinet = cabTotal;
+                    grandActiveCabinet = cabActive;
+                }
+            });
+
+            const currentCabinetTitleMap = {
+                green: 'Зеленый кабинет',
+                blue: 'Синий кабинет',
+                orange: 'Оранжевый кабинет'
+            };
+
+            const cabinetProgressText = document.getElementById('cabinet-progress-text');
+            if (cabinetProgressText) {
+                cabinetProgressText.innerText = `${currentCabinetTitleMap[currentCabinet]}: ${grandActiveCabinet} / ${grandTotalCabinet}`;
+            }
+        }
+
+        function renderItemsGrid() {
+            const container = document.getElementById('items-grid');
+            const titleEl = document.getElementById('active-title');
+            const subCountEl = document.getElementById('active-sub-count');
+            if (!container) return;
+
+            const drawerTitleNames = {
+                drawer1: 'Ящик 1 — Пакуемые и полировочные материалы',
+                drawer2: 'Ящик 2 — Эндодонтия и инструмент',
+                drawer3: 'Ящик 3 — Анестезия, шприцы и изоляция',
+                drawer4: 'Ящик 4 — Боры, растворы и пылесосы',
+                tools: 'Инструменты клиники'
+            };
+
+            if (titleEl) titleEl.innerText = drawerTitleNames[currentDrawer];
+
+            const currentDrawerState = (appState.cabinets[currentCabinet] && appState.cabinets[currentCabinet][currentDrawer]) || {};
+
+            if (currentDrawer === 'tools') {
+                renderToolsTab(container, currentDrawerState, subCountEl);
+            } else if (currentDrawer === 'drawer3') {
+                renderDrawer3(container, currentDrawerState, subCountEl);
+            } else if (currentDrawer === 'drawer4') {
+                renderDrawer4(container, currentDrawerState, subCountEl);
+            } else {
+                let itemsList = currentDrawer === 'drawer1' ? DRAWER_1_ITEMS : DRAWER_2_ITEMS;
+                if (searchQuery) {
+                    itemsList = itemsList.filter(item => item.toLowerCase().includes(searchQuery));
+                }
+                if (subCountEl) subCountEl.innerText = `${itemsList.length} элемента(ов)`;
+
+                if (itemsList.length === 0) {
+                    container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">Ничего не найдено по запросу "${searchQuery}"</div>`;
+                    return;
+                }
+
+                let html = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">`;
+                itemsList.forEach(itemName => {
+                    const isActive = !!currentDrawerState[itemName];
+                    html += renderItemButtonHTML(itemName, isActive);
+                });
+                html += `</div>`;
+                container.innerHTML = html;
+                attachItemButtonHoldListeners();
+            }
+        }
+
+        function renderItemButtonHTML(itemName, isActive) {
+            const colorAccents = {
+                green: isActive ? 'bg-emerald-100/90 border-emerald-400 text-emerald-950 shadow-sm' : 'bg-slate-50/70 border-slate-200 text-slate-700 hover:bg-slate-100/80',
+                blue: isActive ? 'bg-sky-100/90 border-sky-400 text-sky-950 shadow-sm' : 'bg-slate-50/70 border-slate-200 text-slate-700 hover:bg-slate-100/80',
+                orange: isActive ? 'bg-amber-100/90 border-amber-400 text-amber-950 shadow-sm' : 'bg-slate-50/70 border-slate-200 text-slate-700 hover:bg-slate-100/80'
+            };
+
+            const activeClass = colorAccents[currentCabinet];
+
+            const indicatorIcon = isActive 
+                ? `<span class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow-sm"><i class="fa-solid fa-check"></i></span>`
+                : `<span class="w-3 h-3 rounded-full bg-rose-400/80 inline-block ring-2 ring-rose-200/50"></span>`;
+
+            return `
+                <div class="item-btn relative overflow-hidden rounded-2xl p-3 border-2 transition-all btn-pop flex items-center justify-between gap-2 cursor-pointer select-none ${activeClass}"
+                     data-item="${encodeURIComponent(itemName)}">
+                    <span class="text-xs font-medium leading-snug break-words flex-1">${escapeHtml(itemName)}</span>
+                    <div class="shrink-0 flex items-center justify-center">
+                        ${indicatorIcon}
+                    </div>
+                    <div class="press-progress-overlay"></div>
+                </div>
+            `;
+        }
+
+        function renderDrawer3(container, state, subCountEl) {
+            let totalRendered = 0;
+            let html = `<div class="space-y-4">`;
+
+            // Regular items before panel
+            let beforeList = DRAWER_3_STRUCTURE.regularBefore;
+            if (searchQuery) beforeList = beforeList.filter(i => i.toLowerCase().includes(searchQuery));
+            totalRendered += beforeList.length;
+
+            if (beforeList.length > 0) {
+                html += `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">`;
+                beforeList.forEach(item => {
+                    html += renderItemButtonHTML(item, !!state[item]);
+                });
+                html += `</div>`;
+            }
+
+            // Framed Panel "Шприцы"
+            const panel = DRAWER_3_STRUCTURE.framedPanel;
+            let panelItems = panel.items;
+            if (searchQuery) panelItems = panelItems.filter(i => i.toLowerCase().includes(searchQuery));
+            totalRendered += panelItems.length;
+
+            if (panelItems.length > 0) {
+                html += `
+                    <div class="p-4 rounded-3xl border-2 border-indigo-200/80 bg-indigo-50/30 backdrop-blur-sm space-y-3">
+                        <div class="flex items-center gap-2 text-indigo-800 font-cute font-bold text-xs uppercase tracking-wide">
+                            <i class="fa-solid ${panel.icon}"></i>
+                            <span>Интерфейсная панель "${panel.title}"</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            ${panelItems.map(item => renderItemButtonHTML(item, !!state[item])).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Regular items after panel
+            let afterList = DRAWER_3_STRUCTURE.regularAfter;
+            if (searchQuery) afterList = afterList.filter(i => i.toLowerCase().includes(searchQuery));
+            totalRendered += afterList.length;
+
+            if (afterList.length > 0) {
+                html += `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">`;
+                afterList.forEach(item => {
+                    html += renderItemButtonHTML(item, !!state[item]);
+                });
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+
+            if (subCountEl) subCountEl.innerText = `${totalRendered} элемента(ов)`;
+
+            if (totalRendered === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">Ничего не найдено по запросу "${searchQuery}"</div>`;
+                return;
+            }
+
+            container.innerHTML = html;
+            attachItemButtonHoldListeners();
+        }
+
+        function renderDrawer4(container, state, subCountEl) {
+            let totalRendered = 0;
+            let html = `<div class="space-y-4">`;
+
+            // Regular items before panel
+            let beforeList = DRAWER_4_STRUCTURE.regularBefore;
+            if (searchQuery) beforeList = beforeList.filter(i => i.toLowerCase().includes(searchQuery));
+            totalRendered += beforeList.length;
+
+            if (beforeList.length > 0) {
+                html += `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">`;
+                beforeList.forEach(item => {
+                    html += renderItemButtonHTML(item, !!state[item]);
+                });
+                html += `</div>`;
+            }
+
+            // Framed Panels ("Растворы", "Пылесосы")
+            DRAWER_4_STRUCTURE.framedPanels.forEach(panel => {
+                let panelItems = panel.items;
+                if (searchQuery) panelItems = panelItems.filter(i => i.toLowerCase().includes(searchQuery));
+                totalRendered += panelItems.length;
+
+                if (panelItems.length > 0) {
+                    html += `
+                        <div class="p-4 rounded-3xl border-2 border-teal-200/80 bg-teal-50/30 backdrop-blur-sm space-y-3">
+                            <div class="flex items-center gap-2 text-teal-800 font-cute font-bold text-xs uppercase tracking-wide">
+                                <i class="fa-solid ${panel.icon}"></i>
+                                <span>Интерфейсная панель "${panel.title}"</span>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                                ${panelItems.map(item => renderItemButtonHTML(item, !!state[item])).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            // Regular items after panels
+            let afterList = DRAWER_4_STRUCTURE.regularAfter;
+            if (searchQuery) afterList = afterList.filter(i => i.toLowerCase().includes(searchQuery));
+            totalRendered += afterList.length;
+
+            if (afterList.length > 0) {
+                html += `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">`;
+                afterList.forEach(item => {
+                    html += renderItemButtonHTML(item, !!state[item]);
+                });
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+
+            if (subCountEl) subCountEl.innerText = `${totalRendered} элемента(ов)`;
+
+            if (totalRendered === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">Ничего не найдено по запросу "${searchQuery}"</div>`;
+                return;
+            }
+
+            container.innerHTML = html;
+            attachItemButtonHoldListeners();
+        }
+
+        function renderToolsTab(container, state, subCountEl) {
+            let tools = CABINET_TOOLS[currentCabinet] || [];
+            if (searchQuery) {
+                tools = tools.filter(t => t.name.toLowerCase().includes(searchQuery));
+            }
+
+            if (subCountEl) subCountEl.innerText = `${tools.length} прибор(ов)`;
+
+            if (tools.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">Ничего не найдено по запросу "${searchQuery}"</div>`;
+                return;
+            }
+
+            let html = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">`;
+
+            tools.forEach(tool => {
+                html += `
+                    <div class="glass-card rounded-3xl p-4 border border-slate-200/80 space-y-3 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 border-b border-slate-100 pb-2.5">
+                            <div class="w-9 h-9 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid ${tool.icon} text-base"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-cute font-bold text-sm text-slate-800">${escapeHtml(tool.name)}</h3>
+                                <p class="text-[10px] text-slate-400">Чек-лист обслуживания</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-${tool.actions.length} gap-2">
+                `;
+
+                tool.actions.forEach(action => {
+                    const key = `${tool.name}_${action}`;
+                    const isChecked = !!state[key];
+
+                    const actionColorMap = {
+                        green: isChecked ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                        blue: isChecked ? 'bg-sky-500 text-white shadow-md shadow-sky-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                        orange: isChecked ? 'bg-amber-500 text-white shadow-md shadow-amber-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    };
+
+                    const activeStyle = actionColorMap[currentCabinet];
+
+                    const icon = isChecked 
+                        ? `<i class="fa-solid fa-check text-xs"></i>`
+                        : `<i class="fa-solid fa-xmark text-xs text-rose-400"></i>`;
+
+                    html += `
+                        <button class="tool-action-btn relative overflow-hidden py-2 px-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all btn-pop ${activeStyle}"
+                                data-toolkey="${encodeURIComponent(key)}">
+                            <span>${icon}</span>
+                            <span>${escapeHtml(action)}</span>
+                            <div class="press-progress-overlay"></div>
+                        </button>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+            attachItemButtonHoldListeners();
+        }
+
+        function attachItemButtonHoldListeners() {
+            // Material item buttons
+            const itemBtns = document.querySelectorAll('.item-btn');
+            itemBtns.forEach(btn => {
+                const itemName = decodeURIComponent(btn.getAttribute('data-item'));
+                setupHoldAndClickListener(btn, () => {
+                    // Normal click action
+                    toggleMaterialState(itemName);
+                }, () => {
+                    // Long press action (Reset item state)
+                    resetMaterialState(itemName);
+                });
+            });
+
+            // Tool action buttons
+            const toolBtns = document.querySelectorAll('.tool-action-btn');
+            toolBtns.forEach(btn => {
+                const toolKey = decodeURIComponent(btn.getAttribute('data-toolkey'));
+                setupHoldAndClickListener(btn, () => {
+                    toggleToolActionState(toolKey);
+                }, () => {
+                    resetToolActionState(toolKey);
+                });
+            });
+        }
+
+        function setupHoldAndClickListener(element, onClick, onLongPress) {
+            let timer = null;
+            let progressInterval = null;
+            let isLongPress = false;
+            let progressOverlay = element.querySelector('.press-progress-overlay');
+
+            function startPress(e) {
+                if (e.type === 'touchstart') e.preventDefault(); // Prevent ghost click on touch devices
+                isLongPress = false;
+                if (progressOverlay) progressOverlay.style.width = '0%';
+
+                let startTime = Date.now();
+                progressInterval = setInterval(() => {
+                    let elapsed = Date.now() - startTime;
+                    let pct = Math.min(100, (elapsed / 1000) * 100);
+                    if (progressOverlay) progressOverlay.style.width = pct + '%';
+                }, 30);
+
+                timer = setTimeout(() => {
+                    isLongPress = true;
+                    clearInterval(progressInterval);
+                    if (progressOverlay) progressOverlay.style.width = '0%';
+                    if (navigator.vibrate) navigator.vibrate(50);
+                    onLongPress();
+                }, 1000);
+            }
+
+            function cancelPress() {
+                clearTimeout(timer);
+                clearInterval(progressInterval);
+                if (progressOverlay) progressOverlay.style.width = '0%';
+            }
+
+            function endPress(e) {
+                clearTimeout(timer);
+                clearInterval(progressInterval);
+                if (progressOverlay) progressOverlay.style.width = '0%';
+
+                if (!isLongPress) {
+                    onClick();
+                }
+            }
+
+            element.addEventListener('mousedown', startPress);
+            element.addEventListener('mouseup', endPress);
+            element.addEventListener('mouseleave', cancelPress);
+
+            element.addEventListener('touchstart', startPress, { passive: false });
+            element.addEventListener('touchend', endPress);
+            element.addEventListener('touchcancel', cancelPress);
+        }
+
+        function toggleMaterialState(itemName) {
+            if (!appState.cabinets[currentCabinet]) {
+                appState.cabinets[currentCabinet] = { drawer1: {}, drawer2: {}, drawer3: {}, drawer4: {}, tools: {} };
+            }
+            if (!appState.cabinets[currentCabinet][currentDrawer]) {
+                appState.cabinets[currentCabinet][currentDrawer] = {};
+            }
+
+            const currentState = !!appState.cabinets[currentCabinet][currentDrawer][itemName];
+            appState.cabinets[currentCabinet][currentDrawer][itemName] = !currentState;
+
+            playChime(!currentState ? 'toggle-on' : 'toggle-off');
+            saveLocalState();
+            renderApp();
+        }
+
+        function resetMaterialState(itemName) {
+            if (appState.cabinets[currentCabinet] && appState.cabinets[currentCabinet][currentDrawer]) {
+                delete appState.cabinets[currentCabinet][currentDrawer][itemName];
+                playChime('reset');
+                showToast(`Сброшено: "${itemName}"`, 'info');
+                saveLocalState();
+                renderApp();
+            }
+        }
+
+        function toggleToolActionState(toolKey) {
+            if (!appState.cabinets[currentCabinet]) {
+                appState.cabinets[currentCabinet] = { drawer1: {}, drawer2: {}, drawer3: {}, drawer4: {}, tools: {} };
+            }
+            if (!appState.cabinets[currentCabinet].tools) {
+                appState.cabinets[currentCabinet].tools = {};
+            }
+
+            const currentState = !!appState.cabinets[currentCabinet].tools[toolKey];
+            appState.cabinets[currentCabinet].tools[toolKey] = !currentState;
+
+            playChime(!currentState ? 'toggle-on' : 'toggle-off');
+            saveLocalState();
+            renderApp();
+        }
+
+        function resetToolActionState(toolKey) {
+            if (appState.cabinets[currentCabinet] && appState.cabinets[currentCabinet].tools) {
+                delete appState.cabinets[currentCabinet].tools[toolKey];
+                playChime('reset');
+                const cleanName = toolKey.replace('_', ' — ');
+                showToast(`Сброшено: ${cleanName}`, 'info');
+                saveLocalState();
+                renderApp();
+            }
+        }
+
+        function setupTabPressListeners() {
+            // Main Cabinet Tabs Long Press Listener
+            ['green', 'blue', 'orange'].forEach(cab => {
+                const tab = document.getElementById(`tab-cabinet-${cab}`);
+                if (!tab) return;
+                setupHoldAndClickListener(tab, () => {
+                    // Normal tab click
+                    switchCabinet(cab);
+                }, () => {
+                    // Long press: Reset ENTIRE cabinet
+                    resetEntireCabinet(cab);
+                });
+            });
+
+            // Subtab Drawers Long Press Listener
+            ['drawer1', 'drawer2', 'drawer3', 'drawer4', 'tools'].forEach(drw => {
+                const subtab = document.getElementById(`tab-drawer-${drw}`);
+                if (!subtab) return;
+                setupHoldAndClickListener(subtab, () => {
+                    switchDrawer(drw);
+                }, () => {
+                    resetSpecificSubtab(drw);
+                });
+            });
+        }
+
+        function resetSpecificSubtab(drawer) {
+            if (appState.cabinets[currentCabinet] && appState.cabinets[currentCabinet][drawer]) {
+                appState.cabinets[currentCabinet][drawer] = {};
+                playChime('reset');
+                const drawerTitleNames = {
+                    drawer1: 'Ящик 1', drawer2: 'Ящик 2', drawer3: 'Ящик 3', drawer4: 'Ящик 4', tools: 'Инструменты'
+                };
+                showToast(`Очищены материалы в "${drawerTitleNames[drawer]}"`, 'warning');
+                saveLocalState();
+                renderApp();
+            }
+        }
+
+        function resetEntireCabinet(cabinet) {
+            appState.cabinets[cabinet] = { drawer1: {}, drawer2: {}, drawer3: {}, drawer4: {}, tools: {} };
+            playChime('reset');
+            const cabinetNames = { green: 'Зеленый', blue: 'Синий', orange: 'Оранжевый' };
+            showToast(`Полный сброс всех ящиков и инструментов в "${cabinetNames[cabinet]} кабинет"!`, 'warning');
+            saveLocalState();
+            renderApp();
+        }
+
+        function resetCurrentActiveTab() {
+            resetSpecificSubtab(currentDrawer);
+        }
+
+        function openSettingsModal() {
+            const modal = document.getElementById('settings-modal');
+            const card = document.getElementById('settings-modal-card');
+            const urlInput = document.getElementById('api-url-input');
+
+            if (urlInput) urlInput.value = getEffectiveApiUrl();
+
+            if (modal && card) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }
+        }
+
+        function closeSettingsModal() {
+            const modal = document.getElementById('settings-modal');
+            const card = document.getElementById('settings-modal-card');
+            const urlInput = document.getElementById('api-url-input');
+
+            if (urlInput) {
+                const val = urlInput.value.trim();
+                if (val) {
+                    localStorage.setItem('toothcare_npoint_url', val);
+                } else {
+                    localStorage.removeItem('toothcare_npoint_url');
+                }
+            }
+
+            if (modal && card) {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                card.classList.remove('scale-100');
+                card.classList.add('scale-95');
+            }
+        }
+
+        function exportJSONData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `ToothCare_Inventory_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast('JSON с данными экспортирован!', 'success');
+        }
+
+        function triggerImportFile() {
+            const fileInput = document.getElementById('import-file-input');
+            if (fileInput) fileInput.click();
+        }
+
+        function importJSONData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && imported.cabinets) {
+                        appState = imported;
+                        saveLocalState();
+                        renderApp();
+                        showToast('Данные из файла успешно импортированы! ✨', 'success');
+                        closeSettingsModal();
+                    } else {
+                        throw new Error('Некорректная структура JSON');
+                    }
+                } catch (err) {
+                    showToast('Ошибка при чтении файла JSON', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const typeStyles = {
+                success: 'bg-emerald-500 text-white shadow-emerald-200',
+                warning: 'bg-amber-500 text-white shadow-amber-200',
+                error: 'bg-rose-500 text-white shadow-rose-200',
+                info: 'bg-slate-800 text-white shadow-slate-300'
+            };
+
+            const icons = {
+                success: 'fa-circle-check',
+                warning: 'fa-triangle-exclamation',
+                error: 'fa-circle-xmark',
+                info: 'fa-circle-info'
+            };
+
+            toast.className = `px-4 py-3 rounded-2xl text-xs font-semibold shadow-lg flex items-center gap-2.5 transform translate-y-3 opacity-0 transition-all duration-300 pointer-events-auto ${typeStyles[type] || typeStyles.info}`;
+            toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} text-sm"></i> <span>${escapeHtml(message)}</span>`;
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-3', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-3', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2800);
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&rawgt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>
