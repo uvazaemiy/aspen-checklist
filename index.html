@@ -205,7 +205,6 @@
                 <!-- Green Cabinet Tab -->
                 <button id="tab-cabinet-green" 
                         class="cabinet-tab-btn relative overflow-hidden rounded-2xl p-3 sm:p-4 text-left transition-all btn-pop border-2 glass-card flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3"
-                        onclick="switchCabinet('green')">
                     <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
                         <i class="fa-solid fa-leaf text-base"></i>
                     </div>
@@ -222,7 +221,6 @@
                 <!-- Blue Cabinet Tab -->
                 <button id="tab-cabinet-blue" 
                         class="cabinet-tab-btn relative overflow-hidden rounded-2xl p-3 sm:p-4 text-left transition-all btn-pop border-2 glass-card flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3"
-                        onclick="switchCabinet('blue')">
                     <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0">
                         <i class="fa-solid fa-droplet text-base"></i>
                     </div>
@@ -239,7 +237,6 @@
                 <!-- Orange Cabinet Tab -->
                 <button id="tab-cabinet-orange" 
                         class="cabinet-tab-btn relative overflow-hidden rounded-2xl p-3 sm:p-4 text-left transition-all btn-pop border-2 glass-card flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3"
-                        onclick="switchCabinet('orange')">
                     <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
                         <i class="fa-solid fa-sun text-base"></i>
                     </div>
@@ -267,7 +264,7 @@
 
             <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
                 <!-- Drawer 1 -->
-                <button id="tab-drawer-drawer1" onclick="switchDrawer('drawer1')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                <button id="tab-drawer-drawer1" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
                     <i class="fa-solid fa-box font-normal text-slate-400"></i>
                     <span>Ящик 1</span>
                     <span id="subtab-badge-drawer1" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
@@ -275,7 +272,7 @@
                 </button>
 
                 <!-- Drawer 2 -->
-                <button id="tab-drawer-drawer2" onclick="switchDrawer('drawer2')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                <button id="tab-drawer-drawer2" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
                     <i class="fa-solid fa-box font-normal text-slate-400"></i>
                     <span>Ящик 2</span>
                     <span id="subtab-badge-drawer2" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
@@ -283,7 +280,7 @@
                 </button>
 
                 <!-- Drawer 3 -->
-                <button id="tab-drawer-drawer3" onclick="switchDrawer('drawer3')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                <button id="tab-drawer-drawer3" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
                     <i class="fa-solid fa-box font-normal text-slate-400"></i>
                     <span>Ящик 3</span>
                     <span id="subtab-badge-drawer3" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
@@ -291,7 +288,7 @@
                 </button>
 
                 <!-- Drawer 4 -->
-                <button id="tab-drawer-drawer4" onclick="switchDrawer('drawer4')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                <button id="tab-drawer-drawer4" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
                     <i class="fa-solid fa-box font-normal text-slate-400"></i>
                     <span>Ящик 4</span>
                     <span id="subtab-badge-drawer4" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
@@ -299,7 +296,7 @@
                 </button>
 
                 <!-- Tools Subtab -->
-                <button id="tab-drawer-tools" onclick="switchDrawer('tools')" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
+                <button id="tab-drawer-tools" class="subtab-btn relative overflow-hidden px-4 py-2.5 rounded-xl font-medium text-xs whitespace-nowrap transition-all glass-card border border-slate-200 flex items-center gap-2">
                     <i class="fa-solid fa-screwdriver-wrench font-normal text-slate-400"></i>
                     <span>Инструменты</span>
                     <span id="subtab-badge-tools" class="px-1.5 py-0.5 rounded-full bg-slate-200/60 text-[10px] font-bold">0/0</span>
@@ -575,20 +572,56 @@
             renderApp();
         });
 
+        // Автосохранение уже было реализовано (saveLocalState -> debounce 800мс -> saveRemoteData),
+        // но при закрытии/сворачивании вкладки раньше это окно в 800мс могло "съесть" последнее изменение.
+        // Досылаем данные немедленно (с keepalive, чтобы запрос пережил закрытие страницы).
+        function flushPendingSave() {
+            if (!apiSaveTimeout) return;
+            clearTimeout(apiSaveTimeout);
+            apiSaveTimeout = null;
+            const targetUrl = getEffectiveApiUrl();
+            if (!targetUrl || targetUrl === 'YOUR_NPOINT_URL') return;
+            try {
+                fetch(targetUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(appState),
+                    keepalive: true
+                }).catch(() => {});
+            } catch (e) {}
+        }
+
+        window.addEventListener('pagehide', flushPendingSave);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') flushPendingSave();
+        });
+
         function getEffectiveApiUrl() {
             let savedUrl = localStorage.getItem('toothcare_npoint_url');
-            if (savedUrl && savedUrl.trim() !== '') {
-                savedUrl = savedUrl.trim();
-                // Автоматически формируем API ссылку, если пользователь вставил просто ID или ссылку на документацию
-                if (!savedUrl.startsWith('http')) {
-                    savedUrl = 'https://api.npoint.io/' + savedUrl;
-                } else if (savedUrl.includes('npoint.io/docs/')) {
-                    const parts = savedUrl.split('/');
-                    savedUrl = 'https://api.npoint.io/' + parts[parts.length - 1];
-                }
-                return savedUrl;
+            if (!savedUrl || savedUrl.trim() === '') return API_URL;
+
+            savedUrl = savedUrl.trim().replace(/\/+$/, ''); // убираем висячий "/"
+
+            // Пользователь может вставить любой из вариантов:
+            //  - https://api.npoint.io/<id>          (правильный API-адрес)
+            //  - https://www.npoint.io/<id>           (адрес просмотра бина)
+            //  - https://www.npoint.io/docs/<id>       (адрес страницы редактирования)
+            //  - просто голый ID без ссылки
+            // Во всех случаях вытаскиваем именно ID и всегда собираем корректный api.npoint.io адрес —
+            // раньше при вставке ссылки вида npoint.io/<id> (без /docs/) URL не нормализовался
+            // и запросы уходили на HTML-страницу вместо API, поэтому сохранение/загрузка не работали.
+            const match = savedUrl.match(/npoint\.io\/(?:docs\/)?([a-zA-Z0-9]+)(?:[/?#].*)?$/i);
+            let id = null;
+            if (match) {
+                id = match[1];
+            } else if (!savedUrl.startsWith('http')) {
+                id = savedUrl;
             }
-            return API_URL;
+
+            if (id) {
+                return 'https://api.npoint.io/' + id;
+            }
+            return savedUrl;
         }
 
         function saveLocalState() {
@@ -630,27 +663,45 @@
 
             updateSyncBadge('saving', 'Загрузка...');
             try {
-                const response = await fetch(targetUrl, { method: 'GET' });
-                if (response.ok) {
-                    const remoteData = await response.json();
-                    if (remoteData && remoteData.cabinets) {
-                        appState = remoteData;
-                        localStorage.setItem('toothcare_clinic_state_2026', JSON.stringify(appState));
-                        renderApp();
-                        updateSyncBadge('synced', 'Синхронизировано');
-                        if (isManual) showToast('Данные успешно загружены из облака! ✨', 'success');
-                    } else {
-                        throw new Error('Неверная структура данных');
-                    }
+                const response = await fetch(targetUrl, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' },
+                    cache: 'no-store'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Сервер вернул ошибку ${response.status}`);
+                }
+
+                let remoteData;
+                try {
+                    remoteData = await response.json();
+                } catch (parseErr) {
+                    throw new Error('Ответ сервера — не JSON. Проверьте, что в настройках указана именно API-ссылка (api.npoint.io/...), а не страница просмотра/редактирования бина.');
+                }
+
+                if (remoteData && remoteData.cabinets) {
+                    appState = remoteData;
+                    localStorage.setItem('toothcare_clinic_state_2026', JSON.stringify(appState));
+                    renderApp();
+                    updateSyncBadge('synced', 'Синхронизировано');
+                    if (isManual) showToast('Данные успешно загружены из облака! ✨', 'success');
+                } else if (remoteData && typeof remoteData === 'object' && Object.keys(remoteData).length === 0) {
+                    // Новый, ещё пустой бин — это нормально при первом подключении, а не ошибка
+                    updateSyncBadge('synced', 'Синхронизировано');
+                    if (isManual) showToast('Бин пуст. Нажмите "Сохранить", чтобы залить в него текущие данные', 'info');
                 } else {
-                    throw new Error('Ошибка сети: ' + response.status);
+                    throw new Error('Неверная структура данных в бине npoint.io');
                 }
             } catch (err) {
                 console.warn('API Fetch error:', err);
                 updateSyncBadge('error', 'Ошибка сети');
-                if (isManual) showToast('Не удалось загрузить данные из облака', 'error');
+                if (isManual) showToast(err.message || 'Не удалось загрузить данные из облака', 'error');
             }
         }
+
+        let isSavingRemote = false;
+        let pendingRemoteSave = false;
 
         async function saveRemoteData(isManual = false) {
             const targetUrl = getEffectiveApiUrl();
@@ -659,6 +710,14 @@
                 if (isManual) showToast('Укажите действительный URL npoint.io в настройках', 'warning');
                 return;
             }
+
+            // Если сохранение уже идёт — не запускаем второе параллельно, а откладываем ещё одно
+            // на момент завершения текущего (иначе при быстрых кликах запросы могут прийти не по порядку).
+            if (isSavingRemote) {
+                pendingRemoteSave = true;
+                return;
+            }
+            isSavingRemote = true;
 
             updateSyncBadge('saving', 'Сохранение...');
             try {
@@ -675,13 +734,20 @@
                     updateSyncBadge('synced', 'Синхронизировано');
                     if (isManual) showToast('Состояние успешно сохранено в npoint.io! ☁️', 'success');
                 } else {
-                    const errorMsg = await response.text();
-                    throw new Error(`Response code: ${response.status} - ${errorMsg}`);
+                    let errorMsg = '';
+                    try { errorMsg = await response.text(); } catch (e) {}
+                    throw new Error(`Код ответа: ${response.status}${errorMsg ? ' — ' + errorMsg.slice(0, 150) : ''}`);
                 }
             } catch (err) {
                 console.warn('API Save error:', err);
                 updateSyncBadge('error', 'Ошибка сохранения');
-                if (isManual) showToast('Ошибка синхронизации с npoint.io', 'error');
+                if (isManual) showToast(err.message || 'Ошибка синхронизации с npoint.io', 'error');
+            } finally {
+                isSavingRemote = false;
+                if (pendingRemoteSave) {
+                    pendingRemoteSave = false;
+                    saveRemoteData(false);
+                }
             }
         }
 
@@ -943,13 +1009,12 @@
                 : `<span class="w-3 h-3 rounded-full bg-rose-400/80 inline-block ring-2 ring-rose-200/50"></span>`;
 
             return `
-                <div class="item-btn relative overflow-hidden rounded-2xl p-3 border-2 transition-all btn-pop flex items-center justify-between gap-2 cursor-pointer select-none ${activeClass}"
+                <div class="item-btn rounded-2xl p-3 border-2 transition-all btn-pop flex items-center justify-between gap-2 cursor-pointer select-none ${activeClass}"
                      data-item="${encodeURIComponent(itemName)}">
                     <span class="text-xs font-medium leading-snug break-words flex-1">${escapeHtml(itemName)}</span>
                     <div class="shrink-0 flex items-center justify-center">
                         ${indicatorIcon}
                     </div>
-                    <div class="press-progress-overlay"></div>
                 </div>
             `;
         }
@@ -1191,11 +1256,10 @@
                         : `<i class="fa-solid fa-xmark text-xs text-rose-400"></i>`;
 
                     html += `
-                        <button class="tool-action-btn relative overflow-hidden py-2 px-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all btn-pop ${activeStyle}"
+                        <button class="tool-action-btn py-2 px-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all btn-pop ${activeStyle}"
                                 data-toolkey="${encodeURIComponent(key)}">
                             <span>${icon}</span>
                             <span>${escapeHtml(action)}</span>
-                            <div class="press-progress-overlay"></div>
                         </button>
                     `;
                 });
@@ -1211,51 +1275,63 @@
             attachItemButtonHoldListeners();
         }
 
+        // Кнопки материалов и инструментов теперь реагируют только на обычный клик/тап.
+        // Никакого сброса по удержанию здесь больше нет (он остался только у вкладок/под-вкладок ниже).
+        // Используем нативное событие 'click' — браузер сам не генерирует его, если палец
+        // сдвинулся (то есть пользователь скроллил), поэтому кнопки больше не "нажимаются" при скролле.
         function attachItemButtonHoldListeners() {
             const itemBtns = document.querySelectorAll('.item-btn');
             itemBtns.forEach(btn => {
                 const itemName = decodeURIComponent(btn.getAttribute('data-item'));
-                setupHoldAndClickListener(btn, () => {
-                    toggleMaterialState(itemName);
-                }, () => {
-                    resetMaterialState(itemName);
-                });
+                btn.addEventListener('click', () => toggleMaterialState(itemName));
             });
 
             const toolBtns = document.querySelectorAll('.tool-action-btn');
             toolBtns.forEach(btn => {
                 const toolKey = decodeURIComponent(btn.getAttribute('data-toolkey'));
-                setupHoldAndClickListener(btn, () => {
-                    toggleToolActionState(toolKey);
-                }, () => {
-                    resetToolActionState(toolKey);
-                });
+                btn.addEventListener('click', () => toggleToolActionState(toolKey));
             });
         }
 
+        // Удержание (для сброса) оставлено только для вкладок кабинетов и под-вкладок ящиков.
+        // Реализовано через Pointer Events + порог сдвига пальца/мыши: если во время удержания
+        // палец сместился больше чем на MOVE_CANCEL_THRESHOLD px, считаем это скроллом и отменяем
+        // и long-press, и обычный клик — поэтому скролл больше не "продавливает" вкладки.
         function setupHoldAndClickListener(element, onClick, onLongPress) {
+            const MOVE_CANCEL_THRESHOLD = 12; // px
             let timer = null;
             let progressInterval = null;
             let isLongPress = false;
+            let suppressNextClick = false;
+            let startX = 0, startY = 0;
+            let activePointerId = null;
             let progressOverlay = element.querySelector('.press-progress-overlay');
 
-            function startPress(e) {
-                if (e.type === 'touchstart') e.preventDefault();
-                isLongPress = false;
+            function resetVisual() {
                 if (progressOverlay) progressOverlay.style.width = '0%';
+            }
 
-                let startTime = Date.now();
+            function startPress(e) {
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
+                isLongPress = false;
+                startX = e.clientX;
+                startY = e.clientY;
+                activePointerId = e.pointerId;
+                resetVisual();
+
+                const startTime = Date.now();
                 progressInterval = setInterval(() => {
-                    let elapsed = Date.now() - startTime;
-                    let pct = Math.min(100, (elapsed / 1000) * 100);
+                    const elapsed = Date.now() - startTime;
+                    const pct = Math.min(100, (elapsed / 1000) * 100);
                     if (progressOverlay) progressOverlay.style.width = pct + '%';
                 }, 30);
 
                 timer = setTimeout(() => {
                     isLongPress = true;
                     clearInterval(progressInterval);
-                    if (progressOverlay) progressOverlay.style.width = '0%';
+                    resetVisual();
                     if (navigator.vibrate) navigator.vibrate(50);
+                    suppressNextClick = true;
                     onLongPress();
                 }, 1000);
             }
@@ -1263,26 +1339,50 @@
             function cancelPress() {
                 clearTimeout(timer);
                 clearInterval(progressInterval);
-                if (progressOverlay) progressOverlay.style.width = '0%';
+                timer = null;
+                progressInterval = null;
+                activePointerId = null;
+                resetVisual();
+            }
+
+            function movePress(e) {
+                if (activePointerId === null || e.pointerId !== activePointerId) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                if (Math.sqrt(dx * dx + dy * dy) > MOVE_CANCEL_THRESHOLD) {
+                    // Палец/курсор сместился — это скролл или драг, а не тап или удержание.
+                    cancelPress();
+                }
             }
 
             function endPress(e) {
                 clearTimeout(timer);
                 clearInterval(progressInterval);
-                if (progressOverlay) progressOverlay.style.width = '0%';
-
-                if (!isLongPress) {
-                    onClick();
-                }
+                timer = null;
+                progressInterval = null;
+                activePointerId = null;
+                resetVisual();
             }
 
-            element.addEventListener('mousedown', startPress);
-            element.addEventListener('mouseup', endPress);
-            element.addEventListener('mouseleave', cancelPress);
+            element.addEventListener('pointerdown', startPress);
+            element.addEventListener('pointermove', movePress);
+            element.addEventListener('pointerup', endPress);
+            element.addEventListener('pointercancel', cancelPress);
+            element.addEventListener('pointerleave', cancelPress);
 
-            element.addEventListener('touchstart', startPress, { passive: false });
-            element.addEventListener('touchend', endPress);
-            element.addEventListener('touchcancel', cancelPress);
+            // Клик обрабатываем через нативное событие 'click': оно не срабатывает у браузера
+            // после скролл-жеста и одинаково хорошо работает для мыши, тача и клавиатуры (Enter/Space).
+            element.addEventListener('click', () => {
+                if (suppressNextClick) {
+                    suppressNextClick = false;
+                    return;
+                }
+                if (isLongPress) {
+                    isLongPress = false;
+                    return;
+                }
+                onClick();
+            });
         }
 
         function toggleMaterialState(itemName) {
@@ -1301,16 +1401,6 @@
             renderApp();
         }
 
-        function resetMaterialState(itemName) {
-            if (appState.cabinets[currentCabinet] && appState.cabinets[currentCabinet][currentDrawer]) {
-                delete appState.cabinets[currentCabinet][currentDrawer][itemName];
-                playChime('reset');
-                showToast(`Сброшено: "${itemName}"`, 'info');
-                saveLocalState();
-                renderApp();
-            }
-        }
-
         function toggleToolActionState(toolKey) {
             if (!appState.cabinets[currentCabinet]) {
                 appState.cabinets[currentCabinet] = { drawer1: {}, drawer2: {}, drawer3: {}, drawer4: {}, tools: {} };
@@ -1325,17 +1415,6 @@
             playChime(!currentState ? 'toggle-on' : 'toggle-off');
             saveLocalState();
             renderApp();
-        }
-
-        function resetToolActionState(toolKey) {
-            if (appState.cabinets[currentCabinet] && appState.cabinets[currentCabinet].tools) {
-                delete appState.cabinets[currentCabinet].tools[toolKey];
-                playChime('reset');
-                const cleanName = toolKey.replace('_', ' — ');
-                showToast(`Сброшено: ${cleanName}`, 'info');
-                saveLocalState();
-                renderApp();
-            }
         }
 
         function setupTabPressListeners() {
